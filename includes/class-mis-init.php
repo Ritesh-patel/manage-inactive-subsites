@@ -33,6 +33,10 @@ if ( ! class_exists( 'MIS_Init' ) ) {
 		 * Register autoload to load class files
 		 */
 		private function load_dependencies() {
+
+			// include function file
+			require_once MIS_PATH . 'helper/manage-inactive-subsites-functions.php';
+
 			spl_autoload_register( array( $this, 'load_classes' ) );
 		}
 

@@ -9,8 +9,105 @@ if ( ! class_exists( 'MIS_Admin' ) ) {
 	 */
 	class MIS_Admin {
 
-		public function __construct() {
+		/**
+		 * @var array settings_defaults
+		 * Holds the default value for admin settings
+		 */
+		public static $settings_defaults = array(
+			'time_value' => '5',
+			'time_span' => '',
+			'action' => 'archive',
+		);
 
+		public function __construct() {
+			add_action( 'network_admin_menu', array( $this, 'add_network_settings' ), 10 );
+			add_action( 'admin_init', array( $this, 'save_settings' ), 10 );
+		}
+
+		/**
+		 * Manage network admin section
+		 */
+		public function add_network_settings() {
+			$menu_page = add_submenu_page( 'settings.php', __( 'Site Inactivation', 'manage-inactive-subsites' ), __( 'Site Inactivation', 'manage-inactive-subsites' ), 'manage_sites', 'manage-inactive-subsites', array( $this, 'admin_settings_content' ) );
+			add_action( 'load-' . $menu_page, array( $this, 'add_help_tab' ) );
+		}
+
+		/**
+		 * Network admin settings content
+		 */
+		public function admin_settings_content() {
+			$admin_options = mis_get_options();
+			?>
+			<div class="wrap mis-admin">
+				<h2><?php _e( 'Manage Site Inactivation', 'manage-inactive-subsites' ) ?></h2>
+				<form method="post" action="">
+					<table class="form-table">
+						<tr>
+							<th scope="row"><label for="mis_options_time_value"><?php _e( 'Time span to set site in inactive mode', 'manage-inactive-subsites' ) ?></label></th>
+							<td>
+								<input type="number" min="0" class="small-text" name="mis-options[time_value]" id="mis_options_time_value" value="<?php echo $admin_options['time_value'] ?>">
+								<select name="mis-options[time_span]" id="mis_options_time_span">
+									<option <?php selected( $admin_options['time_span'], '' ) ?> value=""><?php _e( '--', 'manage-inactive-subsites' ) ?></option>
+									<option <?php selected( $admin_options['time_span'], 'hours' ) ?> value="hours"><?php _e( 'Hours', 'manage-inactive-subsites' ) ?></option>
+									<option <?php selected( $admin_options['time_span'], 'days' ) ?> value="days"><?php _e( 'Days', 'manage-inactive-subsites' ) ?></option>
+									<option <?php selected( $admin_options['time_span'], 'weeks' ) ?> value="weeks"><?php _e( 'Weeks', 'manage-inactive-subsites' ) ?></option>
+									<option <?php selected( $admin_options['time_span'], 'months' ) ?> value="months"><?php _e( 'Months', 'manage-inactive-subsites' ) ?></option>
+									<option <?php selected( $admin_options['time_span'], 'years' ) ?> value="years"><?php _e( 'Years', 'manage-inactive-subsites' ) ?></option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row"><label for="mis_options_action"><?php _e( 'Inactive mode action', 'manage-inactive-subsites' ) ?></label></th>
+							<td>
+								<select name="mis-options[action]" id="mis_options_action">
+									<option <?php selected( $admin_options['action'], 'archive' ) ?> value="archive"><?php _e( 'Archive', 'manage-inactive-subsites' ) ?></option>
+									<option <?php selected( $admin_options['action'], 'deactivate' ) ?> value="deactivate"><?php _e( 'Deactivate', 'manage-inactive-subsites' ) ?></option>
+									<option <?php selected( $admin_options['action'], 'delete' ) ?> value="delete"><?php _e( 'Delete', 'manage-inactive-subsites' ) ?></option>
+								</select>
+							</td>
+						</tr>
+					</table>
+					<?php wp_nonce_field( 'mis_save_options', 'mis_save_options' ) ?>
+					<?php submit_button( __( 'Save Settings', 'manage-inactive-subsites' ) ) ?>
+				</form>
+			</div>
+			<?php
+		}
+
+		/**
+		 * Save admin settings
+		 */
+		public function save_settings() {
+
+			$request_data = $_POST;
+
+			// check if save settings call
+			if ( ! isset( $request_data['mis_save_options'] ) ) {
+				return;
+			}
+
+			// check for nonce
+			if ( ! wp_verify_nonce( $request_data['mis_save_options'], 'mis_save_options' ) ) {
+				wp_die( __( 'Cheating !', 'manage-inactive-subsites' ) );
+			}
+
+			// save settings
+			if ( isset( $request_data['mis-options'] ) ) {
+				mis_save_options( $request_data['mis-options'] );
+			}
+		}
+
+		/**
+		 * Add help tab for admin settings.
+		 */
+		public function add_help_tab() {
+			$screen = get_current_screen();
+			$screen->add_help_tab( array(
+				'id' => 'mis_settings_help_tab',
+				'title' => __( 'Site Inactivation Overview', 'manage-inactive-subsites' ),
+				'content' => '<p>' . __( 'From this screen you can set when any sub-site should go into inactivation mode.', 'manage-inactive-subsites' ) . '</p>' .
+				'<p>' . __( 'If any sub-site is not active for given time span, the inactive action will be applied to that sub-site.', 'manage-inactive-subsites' ) . '</p>',
+			) );
 		}
 	}
 
