@@ -14,8 +14,10 @@ if ( ! class_exists( 'MIS_Activator' ) ) {
 		 */
 		public static function activate() {
 
-			// start cron on plugin activation
-			wp_schedule_event( time(), 'hourly', 'mis_schedule_hourly_event' );
+			// start cron on plugin activation only if multisite installation
+			if ( is_multisite() ) {
+				wp_schedule_event( time(), 'hourly', 'mis_schedule_hourly_event' );
+			}
 		}
 	}
 

@@ -20,8 +20,31 @@ if ( ! class_exists( 'MIS_Admin' ) ) {
 		);
 
 		public function __construct() {
-			add_action( 'network_admin_menu', array( $this, 'add_network_settings' ), 10 );
-			add_action( 'admin_init', array( $this, 'save_settings' ), 10 );
+
+			if ( is_multisite() ) {
+
+				// init admin hooks if multisite installation
+				add_action( 'network_admin_menu', array( $this, 'add_network_settings' ), 10 );
+				add_action( 'admin_init', array( $this, 'save_settings' ), 10 );
+			} else {
+
+				// admin notice if not multisite installation and if current user is admin
+				if ( current_user_can( 'manage_options' ) ) {
+					add_action( 'admin_notices', array( $this, 'not_mu_admin_notice' ) );
+				}
+			}
+		}
+
+		public function not_mu_admin_notice() {
+
+			// prepare deactivate plugin link
+			$plugin_file = MIS_BASE_NAME;
+			$deactivate_link = '<a href="' . wp_nonce_url( 'plugins.php?action=deactivate&amp;plugin=' . $plugin_file . '&amp;plugin_status=all&amp;paged=1&amp;s=', 'deactivate-plugin_' . $plugin_file ) . '" aria-label="' . esc_attr( sprintf( __( 'Deactivate %s' ), 'Manage Inactive Subsites' ) ) . '">' . __( 'Deactivate', 'manage-inactive-subsites' ) . '</a>';
+			?>
+			<div class="error">
+				<p><?php echo __( 'This is in not WordPress Multisite installation and hence Manage Inactive Subsites plugin is not needed. Please', 'manage-inactive-subsites' ) . ' ' . $deactivate_link . ' ' . __( 'Manage Inactive Subsites plugin.', 'manage-inactive-subsites' ) ?></p>
+			</div>
+			<?php
 		}
 
 		/**
