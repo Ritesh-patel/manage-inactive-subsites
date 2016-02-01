@@ -14,11 +14,21 @@ if ( ! class_exists( 'MIS_Init' ) ) {
 			// load all the dependencies
 			$this->load_dependencies();
 
+			// set locale
+			$this->set_locale();
+
 			// Init admin hooks
 			$this->set_admin_hooks();
 
 			// Init public hooks
 			$this->set_public_hooks();
+		}
+
+		/**
+		 * Load plugin language files
+		 */
+		private function set_locale() {
+			load_plugin_textdomain( 'manage-inactive-subsites', false, basename( MIS_PATH ) . '/languages/' );
 		}
 
 		/**
