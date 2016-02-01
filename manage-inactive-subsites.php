@@ -39,6 +39,10 @@ if ( ! defined( 'MIS_URL' ) ) {
 	define( 'MIS_URL', plugin_dir_url( __FILE__ ) );
 }
 
+
+/**
+ * Function to init plugin functionality
+ */
 function manage_inactive_sites_init() {
 
 	//let's get started
@@ -46,4 +50,27 @@ function manage_inactive_sites_init() {
 	new MIS_Init();
 }
 
+// Start the execution
 add_action( 'plugins_loaded', 'manage_inactive_sites_init' );
+
+/**
+ * Function to be call on plugin activate
+ */
+function activate_manage_inactive_sites() {
+	require_once MIS_PATH . 'includes/class-mis-activator.php';
+	MIS_Activator::activate();
+}
+
+/**
+ * Function to be call on plugin deactivate
+ */
+function deactivate_manage_inactive_sites() {
+	require_once MIS_PATH . 'includes/class-mis-deactivator.php';
+	MIS_Deactivator::deactivate();
+}
+
+// register function to be called on plugin activation
+register_activation_hook( __FILE__, 'activate_manage_inactive_sites' );
+
+// register function to be called on plugin deactivation
+register_deactivation_hook( __FILE__, 'deactivate_manage_inactive_sites' );
