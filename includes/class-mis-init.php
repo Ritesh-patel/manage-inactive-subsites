@@ -16,6 +16,9 @@ if ( ! class_exists( 'MIS_Init' ) ) {
 
 			// Init admin hooks
 			$this->set_admin_hooks();
+
+			// Init public hooks
+			$this->set_public_hooks();
 		}
 
 		/**
@@ -48,6 +51,7 @@ if ( ! class_exists( 'MIS_Init' ) ) {
 		private function load_classes( $class_name ) {
 			$class_path = array(
 				'admin/' . $this->get_class_file_name( $class_name ),
+				'includes/' . $this->get_class_file_name( $class_name ),
 			);
 
 			foreach ( $class_path as $path ) {
@@ -64,6 +68,13 @@ if ( ! class_exists( 'MIS_Init' ) ) {
 		 */
 		private function set_admin_hooks() {
 			$mis_admin = new MIS_Admin();
+		}
+
+		/**
+		 * Init public hooks
+		 */
+		private function set_public_hooks() {
+			$mis_sites = new MIS_Sites();
 		}
 	}
 

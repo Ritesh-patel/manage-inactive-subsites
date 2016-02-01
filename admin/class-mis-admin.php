@@ -48,11 +48,11 @@ if ( ! class_exists( 'MIS_Admin' ) ) {
 								<input type="number" min="0" class="small-text" name="mis-options[time_value]" id="mis_options_time_value" value="<?php echo $admin_options['time_value'] ?>">
 								<select name="mis-options[time_span]" id="mis_options_time_span">
 									<option <?php selected( $admin_options['time_span'], '' ) ?> value=""><?php _e( '--', 'manage-inactive-subsites' ) ?></option>
-									<option <?php selected( $admin_options['time_span'], 'hours' ) ?> value="hours"><?php _e( 'Hours', 'manage-inactive-subsites' ) ?></option>
-									<option <?php selected( $admin_options['time_span'], 'days' ) ?> value="days"><?php _e( 'Days', 'manage-inactive-subsites' ) ?></option>
-									<option <?php selected( $admin_options['time_span'], 'weeks' ) ?> value="weeks"><?php _e( 'Weeks', 'manage-inactive-subsites' ) ?></option>
-									<option <?php selected( $admin_options['time_span'], 'months' ) ?> value="months"><?php _e( 'Months', 'manage-inactive-subsites' ) ?></option>
-									<option <?php selected( $admin_options['time_span'], 'years' ) ?> value="years"><?php _e( 'Years', 'manage-inactive-subsites' ) ?></option>
+									<option <?php selected( $admin_options['time_span'], 'HOUR' ) ?> value="HOUR"><?php _e( 'Hours', 'manage-inactive-subsites' ) ?></option>
+									<option <?php selected( $admin_options['time_span'], 'DAY' ) ?> value="DAY"><?php _e( 'Days', 'manage-inactive-subsites' ) ?></option>
+									<option <?php selected( $admin_options['time_span'], 'WEEK' ) ?> value="WEEK"><?php _e( 'Weeks', 'manage-inactive-subsites' ) ?></option>
+									<option <?php selected( $admin_options['time_span'], 'MONTH' ) ?> value="MONTH"><?php _e( 'Months', 'manage-inactive-subsites' ) ?></option>
+									<option <?php selected( $admin_options['time_span'], 'YEAR' ) ?> value="YEAR"><?php _e( 'Years', 'manage-inactive-subsites' ) ?></option>
 								</select>
 							</td>
 						</tr>
