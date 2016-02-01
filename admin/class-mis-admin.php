@@ -26,6 +26,7 @@ if ( ! class_exists( 'MIS_Admin' ) ) {
 				// init admin hooks if multisite installation
 				add_action( 'network_admin_menu', array( $this, 'add_network_settings' ), 10 );
 				add_action( 'admin_init', array( $this, 'save_settings' ), 10 );
+				add_filter( 'network_admin_plugin_action_links_' . MIS_BASE_NAME, array( $this, 'add_action_links' ), 10, 4 );
 			} else {
 
 				// admin notice if not multisite installation and if current user is admin
@@ -35,6 +36,21 @@ if ( ! class_exists( 'MIS_Admin' ) ) {
 			}
 		}
 
+		/**
+		 * Add settings link in plugin action
+		 */
+		public function add_action_links( $actions, $plugin_file, $plugin_data, $context ) {
+
+			$plugin_links = array(
+				'<a href="' . network_admin_url( 'settings.php?page=manage-inactive-subsites' ) . '">' . __( 'Settings', 'manage-inactive-subsites' ) . '</a>',
+			);
+
+			return array_merge( $actions, $plugin_links );
+		}
+
+		/**
+		 * Admin notice if simple WordPress installation
+		 */
 		public function not_mu_admin_notice() {
 
 			// prepare deactivate plugin link
