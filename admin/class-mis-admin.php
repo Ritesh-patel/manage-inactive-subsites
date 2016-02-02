@@ -82,7 +82,7 @@ if ( ! class_exists( 'MIS_Admin' ) ) {
 				<form method="post" action="">
 					<table class="form-table">
 						<tr>
-							<th scope="row"><label for="mis_options_time_value"><?php _e( 'Time span to set site in inactive mode', 'manage-inactive-subsites' ) ?></label></th>
+							<th scope="row"><label for="mis_options_time_value"><?php _e( 'Inactive Duration', 'manage-inactive-subsites' ) ?></label></th>
 							<td>
 								<input type="number" min="0" class="small-text" name="mis-options[time_value]" id="mis_options_time_value" value="<?php echo $admin_options['time_value'] ?>">
 								<select name="mis-options[time_span]" id="mis_options_time_span">
@@ -93,16 +93,18 @@ if ( ! class_exists( 'MIS_Admin' ) ) {
 									<option <?php selected( $admin_options['time_span'], 'MONTH' ) ?> value="MONTH"><?php _e( 'Months', 'manage-inactive-subsites' ) ?></option>
 									<option <?php selected( $admin_options['time_span'], 'YEAR' ) ?> value="YEAR"><?php _e( 'Years', 'manage-inactive-subsites' ) ?></option>
 								</select>
+								<p class="description"><?php _e( 'Select a schedule of how long the site will be inactive before taking action.', 'manage-inactive-subsites' ) ?></p>
 							</td>
 						</tr>
 						<tr>
-							<th scope="row"><label for="mis_options_action"><?php _e( 'Inactive mode action', 'manage-inactive-subsites' ) ?></label></th>
+							<th scope="row"><label for="mis_options_action"><?php _e( 'Inactive Action', 'manage-inactive-subsites' ) ?></label></th>
 							<td>
 								<select name="mis-options[action]" id="mis_options_action">
 									<option <?php selected( $admin_options['action'], 'archive' ) ?> value="archive"><?php _e( 'Archive', 'manage-inactive-subsites' ) ?></option>
 									<option <?php selected( $admin_options['action'], 'deactivate' ) ?> value="deactivate"><?php _e( 'Deactivate', 'manage-inactive-subsites' ) ?></option>
 									<option <?php selected( $admin_options['action'], 'delete' ) ?> value="delete"><?php _e( 'Delete', 'manage-inactive-subsites' ) ?></option>
 								</select>
+								<p class="description"><?php _e( 'Select the action to perform on expire.', 'manage-inactive-subsites' ) ?></p>
 							</td>
 						</tr>
 					</table>
@@ -141,8 +143,9 @@ if ( ! class_exists( 'MIS_Admin' ) ) {
 		 */
 		public function add_help_tab() {
 			$screen = get_current_screen();
+
 			$screen->add_help_tab( array(
-				'id' => 'mis_settings_help_tab',
+				'id' => 'mis_overview_help_tab',
 				'title' => __( 'Site Inactivation Overview', 'manage-inactive-subsites' ),
 				'content' => '<p>' . __( 'From this screen you can set when any sub-site should go into inactivation mode.', 'manage-inactive-subsites' ) . '</p>' .
 				'<p>' . __( 'If any sub-site is not active for given time span, the inactive action will be applied to that sub-site.', 'manage-inactive-subsites' ) . '</p>',
