@@ -83,7 +83,10 @@ if ( ! class_exists( 'MIS_Sites' ) ) {
 				//todo prepare statement for $time_unit
 				$site_ids = $wpdb->get_col(
 					$wpdb->prepare(
-						"SELECT blog_id FROM $wpdb->blogs WHERE TIMESTAMPDIFF( {$time_unit}, registered, last_updated ) > %d", $time_value
+							"SELECT blog_id
+							FROM $wpdb->blogs
+							WHERE TIMESTAMPDIFF( {$time_unit}, registered, last_updated ) > %d
+							LIMIT 0, 100", $time_value
 					)
 				);
 			}
