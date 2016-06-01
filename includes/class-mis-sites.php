@@ -77,15 +77,28 @@ if ( ! class_exists( 'MIS_Sites' ) ) {
 
 			$site_ids = array();
 
-			// check if time value and time unit is set or not
-			if ( $time_value > 0 && ! empty( $time_unit ) ) {
+			switch( $time_unit ){
+				case "HOUR"     : $time_unit_sql = "HOUR";
+					break;
+				case "DAY"      : $time_unit_sql = "DAY";
+					break;
+				case "WEEK"     : $time_unit_sql = "WEEK";
+					break;
+				case "MONTH"    : $time_unit_sql = "MONTH";
+					break;
+				case "YEAR"     : $time_unit_sql = "YEAR";
+					break;
+				default         : $time_unit_sql = "";
+			}
 
-				//todo prepare statement for $time_unit
+			// check if time value and time unit is set or not
+			if ( $time_value > 0 && ! empty( $time_unit_sql ) ) {
+
 				$site_ids = $wpdb->get_col(
 					$wpdb->prepare(
 							"SELECT blog_id
 							FROM $wpdb->blogs
-							WHERE TIMESTAMPDIFF( {$time_unit}, registered, last_updated ) > %d
+							WHERE TIMESTAMPDIFF( {$time_unit_sql}, registered, last_updated ) > %d
 							LIMIT 0, 100", $time_value
 					)
 				);
